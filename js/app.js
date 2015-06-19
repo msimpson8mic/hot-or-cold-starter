@@ -7,11 +7,12 @@ $(document).ready(function(){
 
     var setSecret= function() {
         secretNumber = (Math.floor(Math.random()*100));
+        console.log(secretNumber);
     };
 
     setSecret();
 
-    var checkAnswer = function() {
+    var ifPositiveAmount = function() {
         switch(true) {
         	case ((userGuess - secretNumber) === 0):
         		setFeedback("You win!");
@@ -35,13 +36,45 @@ $(document).ready(function(){
         }
     };
 
+    var ifNegativeAmount = function() {
+        switch(true) {
+        	case (userGuess / secretNumber === 1):
+        		setFeedback("You win");
+            	finish = true;
+            	break;
+            case ((userGuess - secretNumber) > 50):
+            	setFeedback("You're ice cold!");
+            	break;
+            case ((userGuess - secretNumber) > 30):
+            	setFeedback("You're cold!");
+            	break;
+            case ((userGuess - secretNumber) > 20):
+            	setFeedback("You're warm!");
+            	break;
+            case ((userGuess - secretNumber) > 10):
+            	setFeedback("You're hot!");
+            	break;
+            case ((userGuess - secretNumber) > 0):
+            	setFeedback("You're blazing hot!");
+            	break;
+        }
+    };
+
+    var comparisonAmount = function(){
+        if (userGuess - secretNumber > 0) {
+            ifNegativeAmount();
+        } else {
+            ifPositiveAmount();
+        }
+    }
+
     var setFeedback = function(feedback) {
         $('#feedback').text(feedback);
-    };
+    }
 
     var setCount = function(count){
         $('#count').text(guessCount);
-    };
+    }
 
     var newGame = function(){
         guessCount = 0;
@@ -69,12 +102,12 @@ $(document).ready(function(){
 var checkInput = function() {
     if (userGuess.isNaN) {
         alert("Invalid input.");
-    } else if (userGuess === "") {
+    } else if (userGuess === " ") {
         alert("Please Input a number!");
     } else if (userGuess < 0 || userGuess > 100) {
         alert("Number must be from 1 to 100!");
     } else {
-    	checkAnswer();
+        comparisonAmount();
         $('#userGuess').val('');
         guessCount++;
         setCount(guessCount);
